@@ -483,5 +483,62 @@ class TUsuario{
 		
 		return true;
 	}
+	
+	/**
+	* Establecer los valores de tipo al cual tiene acceso el usuario
+	* @param array $val valores a asignar
+	* @access public
+	* @return boolean True si se realizó sin problemas
+	*/
+	
+	public function setTipo($val[0] = 2){
+		if ($val[0] == '') return false;
+		if ($this->delTipoUsuario){
+			$this->idTipo = $val[0];
+			$db = TBase::conectaDB();
+			foreach($val as $k)
+				$rs = $db->Execute("insert into usuariotipo(idUsuario, idPerfil) values (".$this->getId().", ".$k.")");
+		}
+		return $rs?true:false;
+	}
+
+	/**
+	* Elimina los tipos
+	*
+	* @access public
+	* @return boolean True si se realizó sin problemas
+	*/
+	public function delTipoUsuario(){
+		if ($this->getId() == '') return false;
+		
+		$db = TBase::conectaDB();
+		$rs = $db->Execute("delete from usuariotipo where idUsuario = ".$this->getId()."");
+		return $rs?true:false;
+	}
+	/**
+	* retornar tipo
+	* 
+	* @access public
+	* @return integer identificador
+	*/
+	public function getTipo(){
+		return $this->idTipo;
+	}
+
+	/**
+	* cambiar tipo
+	* 
+	* @access public
+	* @return integer identificador
+	*/
+	public function chgTipo($val = ''){
+		if ($val == '') return false;
+		$db = TBase::conectaDB();
+		$rs = $db->Execute("select idTipo, idUsuario from usuariotipo where idUsuario = ".$this->getId() . " AND idTipo = " . $val . " ");		
+		while(!$rs->EOF){
+			$this->idTipo = $rs->fields['idTipo']);
+		}
+		return $rs?true:false;
+	}
 }
 ?>
